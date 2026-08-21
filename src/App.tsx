@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { CalendarRange, Menu } from 'lucide-react'
+import { CalendarRange } from 'lucide-react'
 import { CalendarPanel } from './components/CalendarPanel'
 import { CategoryForm } from './components/CategoryForm'
 import { DayPanel } from './components/DayPanel'
@@ -19,7 +19,7 @@ export default function App() {
   const [cursor, setCursor] = useState(() => new Date())
   const [dialog, setDialog] = useState<Dialog>(null)
   const [selectedDay, setSelectedDay] = useState<string | null>(null)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   const progress = useMemo(() => computeProgress(tasks), [tasks])
 
@@ -44,28 +44,20 @@ export default function App() {
         <div className="hidden flex-1 justify-center pt-4 md:flex">
           <FlipClock />
         </div>
-        <button
-          type="button"
-          aria-label="Toggle sidebar"
-          onClick={() => setSidebarOpen((o) => !o)}
-          className="rounded-md p-2 text-neutral-400 transition hover:bg-neutral-800 hover:text-white"
-        >
-          <Menu size={20} />
-        </button>
       </header>
 
       <div className="flex flex-col gap-10 lg:flex-row">
-        {sidebarOpen && (
-          <Sidebar
-            categories={categories}
-            progress={progress}
-            countsByCategory={countsByCategory}
-            onNewTask={() => setDialog({ kind: 'task', date: toKey(new Date()), priority: 'normal' })}
-            onNewUrgentTask={() => setDialog({ kind: 'task', date: toKey(new Date()), priority: 'urgent' })}
-            onNewCategory={() => setDialog({ kind: 'category' })}
-            onRemoveCategory={removeCategory}
-          />
-        )}
+        <Sidebar
+          categories={categories}
+          progress={progress}
+          countsByCategory={countsByCategory}
+          collapsed={sidebarCollapsed}
+          onToggleCollapsed={() => setSidebarCollapsed((c) => !c)}
+          onNewTask={() => setDialog({ kind: 'task', date: toKey(new Date()), priority: 'normal' })}
+          onNewUrgentTask={() => setDialog({ kind: 'task', date: toKey(new Date()), priority: 'urgent' })}
+          onNewCategory={() => setDialog({ kind: 'category' })}
+          onRemoveCategory={removeCategory}
+        />
 
         <CalendarPanel
           tasks={tasks}
