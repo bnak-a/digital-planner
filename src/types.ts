@@ -8,6 +8,9 @@ export interface Task {
   priority: Priority
   daily: boolean
   done: boolean
+  /** Minutes since midnight the task starts at. Omitted means an all-day task. */
+  startMinutes?: number
+  durationMinutes?: number
 }
 
 export interface Category {

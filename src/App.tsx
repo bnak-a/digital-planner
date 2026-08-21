@@ -12,7 +12,10 @@ import { computeProgress } from './lib/progress'
 import { usePlanner } from './lib/store'
 import type { Priority } from './types'
 
-type Dialog = { kind: 'task'; date: string; priority: Priority } | { kind: 'category' } | null
+type Dialog =
+  | { kind: 'task'; date: string; priority: Priority; startMinutes?: number }
+  | { kind: 'category' }
+  | null
 
 export default function App() {
   const { tasks, categories, addTask, removeTask, toggleTask, addCategory, removeCategory } = usePlanner()
@@ -88,6 +91,7 @@ export default function App() {
           onCursorChange={setCursor}
           onToggleTask={toggleTask}
           onSelectDay={setSelectedDay}
+          onCreateTaskAt={(date, startMinutes) => setDialog({ kind: 'task', date, priority: 'normal', startMinutes })}
         />
       </div>
 
@@ -112,6 +116,7 @@ export default function App() {
             categories={categories}
             defaultDate={dialog.date}
             defaultPriority={dialog.priority}
+            defaultStartMinutes={dialog.startMinutes}
             onSubmit={(task) => {
               addTask(task)
               setDialog(null)

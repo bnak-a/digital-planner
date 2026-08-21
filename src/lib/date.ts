@@ -43,6 +43,35 @@ export function monthGrid(year: number, month: number): Date[] {
   })
 }
 
+export function addDays(date: Date, days: number): Date {
+  const d = new Date(date)
+  d.setDate(d.getDate() + days)
+  return d
+}
+
+/** The 7 dates of the week containing `date`, starting Sunday. */
+export function weekDates(date: Date): Date[] {
+  const first = startOfWeek(date)
+  return Array.from({ length: 7 }, (_, i) => addDays(first, i))
+}
+
+export function formatWeekRange(start: Date, end: Date): string {
+  const sameMonth = start.getMonth() === end.getMonth()
+  const sameYear = start.getFullYear() === end.getFullYear()
+  const startLabel = `${MONTHS[start.getMonth()].slice(0, 3)} ${start.getDate()}`
+  const endLabel = sameMonth
+    ? `${end.getDate()}`
+    : `${MONTHS[end.getMonth()].slice(0, 3)} ${end.getDate()}`
+  const yearLabel = sameYear ? end.getFullYear() : `${start.getFullYear()} – ${end.getFullYear()}`
+  return `${startLabel} – ${endLabel}, ${yearLabel}`
+}
+
+export function formatDayHeading(date: Date): string {
+  return `${['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()]}, ${
+    MONTHS[date.getMonth()]
+  } ${date.getDate()}, ${date.getFullYear()}`
+}
+
 export function formatCellLabel(date: Date, month: number): string {
   const isFirstOfMonth = date.getDate() === 1
   if (isFirstOfMonth && date.getMonth() !== month) {
