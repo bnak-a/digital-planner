@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { CalendarRange } from 'lucide-react'
+import { CalendarRange, Menu } from 'lucide-react'
 import { CalendarPanel } from './components/CalendarPanel'
 import { CategoryForm } from './components/CategoryForm'
 import { DayPanel } from './components/DayPanel'
@@ -38,12 +38,17 @@ export default function App() {
     <div className="min-h-full px-6 py-8 lg:px-12">
       <header className="mb-10 flex items-start justify-between gap-6">
         <div>
-          <CalendarRange size={44} className="text-accent" strokeWidth={2.2} />
+          <button
+            type="button"
+            aria-label="Toggle sidebar"
+            onClick={() => setSidebarCollapsed((c) => !c)}
+            className="-ml-2 rounded-md p-2 text-neutral-300 transition hover:bg-neutral-800 hover:text-white"
+          >
+            <Menu size={28} />
+          </button>
           <h1 className="mt-4 text-4xl font-bold tracking-tight">The Easy Monthly Planner</h1>
         </div>
-        <div className="hidden flex-1 justify-center pt-4 md:flex">
-          <FlipClock />
-        </div>
+        <CalendarRange size={44} className="shrink-0 text-accent" strokeWidth={2.2} />
       </header>
 
       <div className="flex flex-col gap-10 lg:flex-row">
@@ -59,14 +64,20 @@ export default function App() {
           onRemoveCategory={removeCategory}
         />
 
-        <CalendarPanel
-          tasks={tasks}
-          categories={categories}
-          cursor={cursor}
-          onCursorChange={setCursor}
-          onToggleTask={toggleTask}
-          onSelectDay={setSelectedDay}
-        />
+        <div className="min-w-0 flex-1">
+          <div className="mb-8 flex justify-center">
+            <FlipClock />
+          </div>
+
+          <CalendarPanel
+            tasks={tasks}
+            categories={categories}
+            cursor={cursor}
+            onCursorChange={setCursor}
+            onToggleTask={toggleTask}
+            onSelectDay={setSelectedDay}
+          />
+        </div>
       </div>
 
       {selectedDay && (
